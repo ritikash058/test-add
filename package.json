@@ -1,0 +1,22 @@
+{
+  "name": "zls-test-add",
+  "version": "1.0.1",
+  "description": "this is a test package to check given number odd or even",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ritikash058/test-add.git"
+  },
+  "keywords": [
+    "test"
+  ],
+  "author": "ZLS",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ritikash058/test-add/issues"
+  },
+  "homepage": "https://github.com/ritikash058/test-add#readme"
+}
