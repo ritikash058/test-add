@@ -1,6 +1,6 @@
 {
   "name": "zls-test-add",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "this is a test package to check given number odd or even",
   "main": "index.js",
   "scripts": {
