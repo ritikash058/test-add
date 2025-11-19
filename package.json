@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/ritikash058/test-add/issues"
   },
-  "homepage": "https://github.com/ritikash058/test-add"
+  "homepage": "https://github.com/ritikash058/test-add",
+  "dependencies": {
+    "crypto": "^1.0.1",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }

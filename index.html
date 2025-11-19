@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSewa Payment Integration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .payment-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>eSewa Payment Demo</h1>
+    
+    <div id="paymentForm">
+        <div class="form-group">
+            <label for="amount">Amount:</label>
+            <input type="number" id="amount" name="amount" value="100" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="taxAmount">Tax Amount:</label>
+            <input type="number" id="taxAmount" name="taxAmount" value="10" required>
+        </div>
+        
+        <button onclick="initiatePayment()">Pay with eSewa</button>
+    </div>
+
+    <!-- Hidden form that will be auto-submitted to eSewa -->
+    <form id="esewaForm" class="payment-form" action="https://rc-epay.esewa.com.np/api/epay/main/v2/form" method="POST">
+        <input type="hidden" name="amount" id="form_amount">
+        <input type="hidden" name="tax_amount" id="form_tax_amount">
+        <input type="hidden" name="total_amount" id="form_total_amount">
+        <input type="hidden" name="transaction_uuid" id="form_transaction_uuid">
+        <input type="hidden" name="product_code" id="form_product_code">
+        <input type="hidden" name="product_service_charge" id="form_product_service_charge">
+        <input type="hidden" name="product_delivery_charge" id="form_product_delivery_charge">
+        <input type="hidden" name="success_url" id="form_success_url">
+        <input type="hidden" name="failure_url" id="form_failure_url">
+        <input type="hidden" name="signed_field_names" id="form_signed_field_names">
+        <input type="hidden" name="signature" id="form_signature">
+    </form>
+
+    <script>
+        async function initiatePayment() {
+            const amount = document.getElementById('amount').value;
+            const taxAmount = document.getElementById('taxAmount').value;
+
+            try {
+                const response = await fetch('/initiate-payment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: amount,
+                        taxAmount: taxAmount
+                    })
+                });
+
+                const result = await response.json();
+            
+                if (result.success) {
+                    // Populate the hidden form with payment data
+                    const formData = result.data;
+                    document.getElementById('form_amount').value = formData.amount;
+                    document.getElementById('form_tax_amount').value = formData.tax_amount;
+                    document.getElementById('form_total_amount').value = formData.total_amount;
+                    document.getElementById('form_transaction_uuid').value = formData.transaction_uuid;
+                    document.getElementById('form_product_code').value = formData.product_code;
+                    document.getElementById('form_product_service_charge').value = formData.product_service_charge;
+                    document.getElementById('form_product_delivery_charge').value = formData.product_delivery_charge;
+                    document.getElementById('form_success_url').value = formData.success_url;
+                    document.getElementById('form_failure_url').value = formData.failure_url;
+                    document.getElementById('form_signed_field_names').value = formData.signed_field_names;
+                    document.getElementById('form_signature').value = formData.signature;
+
+                    // Submit the form to eSewa
+                    document.getElementById('esewaForm').submit();
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while initiating payment.');
+            }
+        }
+    </script>
+</body>
+</html>
